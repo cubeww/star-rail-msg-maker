@@ -1,0 +1,32 @@
+<contacts>
+    <person name="小喷菇" desc="我要做游戏！在学习中" icon="images/xpg.png">
+        <session>
+            <left time='1.0' name='小喷菇' icon='images/xpg-chat.png' type='text'>在？</left>
+
+            <select type='text'>
+                <option msg='怎么了？'>
+                    <right name='穹' icon='images/qiong-chat.png' type='text'>什么事？</right>
+                </option>
+                <option msg='有屁快放'>
+                    <right name='穹' icon='images/qiong-chat.png' type='text'>？</right>
+                </option>
+            </select>
+
+            <left time='1.0' name='小喷菇' icon='images/xpg-chat.png' type='text'>我的游戏做好了</left>
+            <left time='1.0' name='小喷菇' icon='images/xpg-chat.png' type='text'>要试试吗</left>
+
+            <select type='text'>
+                <option msg='没兴趣'>
+                    <right name='穹' icon='images/qiong-chat.png' type='text'>不玩</right>
+                    <right name='穹' icon='images/qiong-chat.png' type='text'>没时间</right>
+                </option>
+                <option msg='再见'>
+                    <right name='穹' icon='images/qiong-chat.png' type='text'></right>
+                </option>
+            </select>
+
+            <left time='1.0' name='小喷菇' icon='images/xpg-chat.png' type='text'>行</left>
+            <left time='1.2' name='小喷菇' icon='images/xpg-chat.png' type='text'>那我下次再来</left>
+        </session>
+    </person>
+</contacts>
