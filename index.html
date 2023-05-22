@@ -275,6 +275,12 @@
       .msg-left-content {
       }
 
+      .msg-pic-content {
+        width: 150px;
+        height: 150px;
+        margin: 20px;
+      }
+
       .msg-left-name-and-content {
         display: inline-block;
         max-width: 300px;
@@ -489,7 +495,7 @@
                 @scroll="onChatBoxMiddleScroll"
               >
                 <!-- 聊天内容... -->
-                <div v-for="m in currentSession.messages" :key="m">
+                <template v-for="m in currentSession.messages" :key="m">
                   <!-- 1. 对方的消息 -->
                   <div v-if="m.type=='left'" class="msg-left">
                     <!-- 聊天内容-头像 -->
@@ -517,9 +523,21 @@
                             <div class="msg-circle-3"></div>
                           </div>
                           <transition name="msg-content-fade">
-                            <div v-if="m.finish" class="msg-left-balloon">
-                              <div class="msg-left-content">{{m.msg}}</div>
-                            </div>
+                            <template v-if="m.finish">
+                              <div
+                                v-if="m.msgType=='text'"
+                                class="msg-left-balloon"
+                              >
+                                <div class="msg-left-content">{{m.msg}}</div>
+                              </div>
+                              <div v-else>
+                                <img
+                                  class="msg-pic-content"
+                                  :src="m.src"
+                                  alt=""
+                                />
+                              </div>
+                            </template>
                           </transition>
                         </div>
                       </transition>
@@ -533,7 +551,10 @@
                         <!-- 聊天内容-昵称 -->
                         <div class="msg-right-name">{{m.name}}</div>
                         <!-- 聊天内容-消息 -->
-                        <div class="msg-right-content">{{m.msg}}</div>
+                        <div v-if="m.msgType=='text'" class="msg-right-content">
+                          {{m.msg}}
+                        </div>
+                        <img v-else class="msg-pic-content" :src="m.src" alt="" />
                       </div>
                     </transition>
 
@@ -547,7 +568,7 @@
                       />
                     </transition>
                   </div>
-                </div>
+                </template>
                 <!-- TODO: 优化底部水平线显示条件 -->
                 <hr v-if="currentSession.finish" class="chat-box-middle-hr" />
               </div>
@@ -663,6 +684,7 @@
                   icon: session.nextNode.getAttribute("icon"),
                   msgType: session.nextNode.getAttribute("type"),
                   msg: session.nextNode.textContent,
+                  src: session.nextNode.getAttribute("src"),
                   appear: false, // 若appear由false->true，则显示渐变动画
                   finish: false, // 若finish为false，则显示 码字中 “···” 图标
                 })

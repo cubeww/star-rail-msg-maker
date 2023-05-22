@@ -1,12 +1,14 @@
 <contacts>
     <person name="三月七" desc="今天也是三月七~" icon="images/三月七-小.png">
         <session>
-            <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>你好啊</left>
+            <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>你好呀</left>
+            <left time='1.0' name='三月七' icon='images/三月七.png' type='pic' src='images/三月七1.gif'>[骄傲]</left>
             <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>欢迎来到星铁聊天记录生成器（测试版）</left>
 
             <select type='text'>
                 <option msg='你是谁'>
                     <right name='穹' icon='images/穹.png' type='text'>你是？</right>
+                    <right name='穹' icon='images/穹.png' type='pic' src='images/穹1.gif'>吃瓜</right>
                     <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>我是这个网页的向导，三月七</left>
                 </option>
                 <option msg='这是啥'>
