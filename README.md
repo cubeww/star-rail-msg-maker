@@ -6,7 +6,7 @@
 
 ## 尝试一下？
 
-https://cubeww.github.io/star-rail-msg/
+https://cubeww.github.io/star-rail-msg-maker/
 
 ## 开发工具
 
