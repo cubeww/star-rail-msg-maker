@@ -1,0 +1,36 @@
+<contacts>
+    <person name="三月七" desc="今天也是三月七~" icon="images/三月七-小.png">
+        <session>
+            <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>你好啊</left>
+            <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>欢迎来到星铁聊天记录生成器（测试版）</left>
+
+            <select type='text'>
+                <option msg='你是谁'>
+                    <right name='穹' icon='images/穹.png' type='text'>你是？</right>
+                    <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>我是这个网页的向导，三月七</left>
+                </option>
+                <option msg='这是啥'>
+                    <right name='穹' icon='images/穹.png' type='text'>这是什么？</right>
+                </option>
+            </select>
+
+            <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>这个网站可以制作星穹铁道风格的聊天记录</left>
+            <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>就像你现在看见的一样</left>
+            <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>并且可以像游戏里那样交互哦</left>
+            
+            <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>想要学习怎么制作一个短信会话吗？</left>
+            <select type='text'>
+                <option msg='想'>
+                    <right name='穹' icon='images/穹.png' type='text'>想啊，很想啊</right>
+                </option>
+                <option msg='不想'>
+                    <right name='穹' icon='images/穹.png' type='text'>。。。不想</right>
+
+                    <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>没关系</left>
+                    <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>等你想的时候可以随时来问我~</left>
+                </option>
+            </select>
+
+        </session>
+    </person>
+</contacts>

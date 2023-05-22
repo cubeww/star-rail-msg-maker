@@ -275,6 +275,11 @@
       .msg-left-content {
       }
 
+      .msg-left-name-and-content{
+        display: inline-block;
+        max-width: 300px;
+      }
+
       .msg-right-icon {
         margin-right: 20px;
       }
@@ -282,6 +287,7 @@
         display: inline-block;
         margin-top: 0;
         vertical-align: top;
+        max-width: 300px;
       }
       .msg-right-name {
         color: #7b7b7b;
@@ -295,6 +301,7 @@
         border-bottom-left-radius: 10px;
         border-bottom-right-radius: 10px;
         padding: 10px;
+        text-align: left;
       }
       @keyframes blink {
         0% {
@@ -494,7 +501,7 @@
                         class="msg-left-icon"
                       />
                     </transition>
-                    <div style="display: inline-block">
+                    <div class="msg-left-name-and-content">
                       <!-- 聊天内容-昵称 -->
                       <transition name="msg-name-fade">
                         <div v-if="m.appear" class="msg-left-name">
@@ -569,6 +576,10 @@
         </div>
       </div>
     </div>
+    <footer>
+      <div>Star Rail Message Maker v0.5</div> 
+      <div>B站：@冰块Cube</div>
+    </footer>
     <script>
       const { createApp, reactive } = Vue
       const app = createApp({
@@ -679,22 +690,39 @@
                 if (session.nextNode.nextElementSibling != null) {
                   // 1）有下一个节点
                   next = session.nextNode.nextElementSibling
-                } else if (session.nextNode.parentNode.tagName == "option") {
-                  // 2）没有下一个节点，父节点是option
-                  next =
-                    session.nextNode.parentNode.parentNode.nextElementSibling
+                } else {
+                  // 2）没有下一个节点，向上跳出
+                  next = session.nextNode
+                  let flag = false
+                  while (next.parentNode.tagName != "session") {
+                    if (next.parentNode.tagName == "option") {
+                      next = next.parentNode.parentNode
+                    }
+
+                    if (next.nextElementSibling != null) {
+                      next = next.nextElementSibling
+                      flag = true
+                      break
+                    }
+                  }
+
+                  // 播放完成
+                  if (!flag) {
+                    next = null
+                  }
                 }
+
                 if (next != null) {
                   // 存在下一个节点，2s后发送下一个节点
                   session.nextNode = next
                   setTimeout(() => {
                     this.sendNextNode(session)
-                  }, 2100)
+                  }, finishTime + 2100)
                 } else {
                   // 不存在下一个节点，设置会话为完成状态
                   setTimeout(() => {
                     session.finish = true
-                  }, 2100)
+                  }, finishTime + 2100)
                 }
 
                 break
@@ -808,7 +836,7 @@
         mounted() {
           // （测试）加载聊天记录xml文件
           let xhr = new XMLHttpRequest()
-          xhr.open("GET", "xpg.xml", true)
+          xhr.open("GET", "tutorial.xml", true)
           xhr.onreadystatechange = () => {
             if (xhr.readyState === 4 && xhr.status === 200) {
               // 解析聊天记录xml
