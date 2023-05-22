@@ -2,13 +2,13 @@
     <person name="三月七" desc="今天也是三月七~" icon="images/三月七-小.png">
         <session>
             <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>你好呀</left>
-            <left time='1.0' name='三月七' icon='images/三月七.png' type='pic' src='images/三月七1.gif'>[骄傲]</left>
+            <left time='1.0' name='三月七' icon='images/三月七.png' type='pic' src='images/三月七-骄傲.gif'>[骄傲]</left>
             <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>欢迎来到星铁聊天记录生成器（测试版）</left>
 
             <select type='text'>
                 <option msg='你是谁'>
                     <right name='穹' icon='images/穹.png' type='text'>你是？</right>
-                    <right name='穹' icon='images/穹.png' type='pic' src='images/穹1.gif'>吃瓜</right>
+                    <right name='穹' icon='images/穹.png' type='pic' src='images/穹-吃瓜.gif'>[吃瓜]</right>
                     <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>我是这个网页的向导，三月七</left>
                 </option>
                 <option msg='这是啥'>
@@ -20,14 +20,17 @@
             <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>就像你现在看见的一样</left>
             <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>并且可以像游戏里那样交互哦</left>
             
-            <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>想要学习怎么制作一个短信会话吗？</left>
+            <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>想要学习制作一个短信会话吗？</left>
             <select type='text'>
                 <option msg='想'>
                     <right name='穹' icon='images/穹.png' type='text'>想啊，很想啊</right>
+
+                    <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>（教程施工中，咕咕咕）</left>
                 </option>
                 <option msg='不想'>
-                    <right name='穹' icon='images/穹.png' type='text'>。。。不想</right>
+                    <right name='穹' icon='images/穹.png' type='text'>说的好，但是我不想</right>
 
+                    <left time='1.0' name='三月七' icon='images/三月七.png' type='pic' src='images/三月七-哭.gif'>[哭]</left>
                     <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>没关系</left>
                     <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>等你想的时候可以随时来问我~</left>
                 </option>
