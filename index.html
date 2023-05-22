@@ -275,7 +275,7 @@
       .msg-left-content {
       }
 
-      .msg-left-name-and-content{
+      .msg-left-name-and-content {
         display: inline-block;
         max-width: 300px;
       }
@@ -577,7 +577,10 @@
       </div>
     </div>
     <footer>
-      <div>Star Rail Message Maker v0.5</div> 
+      <div>
+        Star Rail Message Maker v0.5
+        <a href="https://github.com/cubeww/star-rail-msg-maker">Github</a>
+      </div>
       <div>B站：@冰块Cube</div>
     </footer>
     <script>
@@ -597,15 +600,14 @@
             // 当前消息会话对象
             currentSession: null,
 
-            // 表示会话是否切换完成
+            // 表示会话是否切换完成（过渡动画用）
             sessionChanged: false,
 
             // 表示当前会话最后一条信息
             currentMessage: null,
 
-            // 表示是否自动滑到底端
+            // 滚轮滑动相关
             autoScroll: true,
-
             lastScrollTop: 0,
             isSelectClose: false,
           }
@@ -845,6 +847,7 @@
           }
           xhr.send()
 
+          // 聊天框滑到底时需要自动下滚
           setInterval(() => {
             let cm = this.$refs.chatBoxMiddle
             if (!cm) {
