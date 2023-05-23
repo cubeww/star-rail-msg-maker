@@ -26,6 +26,8 @@
                     <right name='穹' icon='images/穹.png' type='text'>想啊，很想啊</right>
 
                     <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>好嘞</left>
+                    <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>https://github.com/cubeww/star-rail-msg-maker/blob/master/README.md</left>
+                    <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>来看吧</left>
                 </option>
                 <option msg='不想'>
                     <right name='穹' icon='images/穹.png' type='text'>说的好，但是我不想</right>
