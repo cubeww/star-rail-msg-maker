@@ -16,7 +16,7 @@
                 </option>
             </select>
 
-            <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>这个网站可以制作星穹铁道风格的聊天记录</left>
+            <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>这个网页可以制作星穹铁道风格的聊天记录</left>
             <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>就像你现在看见的一样</left>
             <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>并且可以像游戏里那样交互哦</left>
             
@@ -25,7 +25,7 @@
                 <option msg='想'>
                     <right name='穹' icon='images/穹.png' type='text'>想啊，很想啊</right>
 
-                    <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>（教程施工中，咕咕咕）</left>
+                    <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>好嘞</left>
                 </option>
                 <option msg='不想'>
                     <right name='穹' icon='images/穹.png' type='text'>说的好，但是我不想</right>

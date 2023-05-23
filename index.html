@@ -418,219 +418,254 @@
     </style>
   </head>
   <body>
-    <div id="app" class="form">
-      <!-- 顶部条 -->
-      <div class="title-bar">
-        <img src="images/icon.png" alt="" /> &nbsp;&nbsp;
-        <span class="title">短信</span>
+    <div id="app">
+      <button @click="showTextArea=!showTextArea">
+        加载XML {{!showTextArea?'↓':'↑'}}
+      </button>
+      <div v-if="showTextArea">
+        <textarea
+          title="XML输入"
+          name=""
+          id=""
+          cols="30"
+          rows="10"
+          v-model="inputXMLText"
+        ></textarea>
+        <button @click="submitXML">提交</button>
       </div>
+      <br /><br />
+      <div class="form">
+        <!-- 顶部条 -->
+        <div class="title-bar">
+          <img src="images/icon.png" alt="" /> &nbsp;&nbsp;
+          <span class="title">短信</span>
+        </div>
 
-      <div class="left">
-        <!-- 联系人列表 -->
-        <div class="contacts-list">
-          <div v-for="(p, index) in contacts" :key="p">
-            <!-- 1. 联系人盒子本体 -->
-            <div
-              class="person"
-              @mouseover="p.hover=true"
-              @mouseleave="p.hover=false"
-              :class="{'person-select':p.select && !p.hover, 'person-hover':p.hover}"
-              @click="selectPerson(p)"
-            >
-              <!-- 头像 -->
-              <img :src="p.icon" alt="" /> &nbsp;&nbsp;
-              <!-- 名称 -->
-              <span>{{p.name}}</span>
-              <!-- 指示箭头 -->
-              <img
-                class="arrow"
-                :class="{'arrow-hover':p.hover,'arrow-select':p.select}"
-                src="images/arrow.png"
-                alt=""
-              />
-            </div>
-            <!-- 2. 联系人选中时，下面出现的会话列表 -->
-            <div v-for="s in p.sessions" :key="s">
-              <transition name="fade">
-                <div
-                  v-show="p.select"
-                  class="session"
-                  @mouseover="s.hover=true"
-                  @mouseleave="s.hover=false"
-                  :class="{'session-hover':s.hover,'session-select':s.select}"
-                  @click="selectSession(p, s)"
-                >
-                  <!-- 会话状态图标 -->
-                  <img
-                    class="session-icon"
-                    :src="!s.finish?'images/session-icon.png':'images/session-finish.png'"
-                    alt=""
-                  />
-                  <!-- 会话名称 -->
-                  <span>{{s.name}}</span>
-                </div>
-              </transition>
+        <div class="left">
+          <!-- 联系人列表 -->
+          <div class="contacts-list">
+            <div v-for="(p, index) in contacts" :key="p">
+              <!-- 1. 联系人盒子本体 -->
+              <div
+                class="person"
+                @mouseover="p.hover=true"
+                @mouseleave="p.hover=false"
+                :class="{'person-select':p.select && !p.hover, 'person-hover':p.hover}"
+                @click="selectPerson(p)"
+              >
+                <!-- 头像 -->
+                <img :src="p.icon" alt="" /> &nbsp;&nbsp;
+                <!-- 名称 -->
+                <span>{{p.name}}</span>
+                <!-- 指示箭头 -->
+                <img
+                  class="arrow"
+                  :class="{'arrow-hover':p.hover,'arrow-select':p.select}"
+                  src="images/arrow.png"
+                  alt=""
+                />
+              </div>
+              <!-- 2. 联系人选中时，下面出现的会话列表 -->
+              <div v-for="s in p.sessions" :key="s">
+                <transition name="fade">
+                  <div
+                    v-show="p.select"
+                    class="session"
+                    @mouseover="s.hover=true"
+                    @mouseleave="s.hover=false"
+                    :class="{'session-hover':s.hover,'session-select':s.select}"
+                    @click="selectSession(p, s)"
+                  >
+                    <!-- 会话状态图标 -->
+                    <img
+                      class="session-icon"
+                      :src="!s.finish?'images/session-icon.png':'images/session-finish.png'"
+                      alt=""
+                    />
+                    <!-- 会话名称 -->
+                    <span>{{s.name}}</span>
+                  </div>
+                </transition>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- 聊天框 -->
-      <div class="right">
-        <div class="chat-box" :class="{'chat-box-active':sessionSelected}">
-          <transition name="fade">
-            <div class="chat-box-container" v-if="sessionChanged">
-              <!-- 聊天框-顶部盒子（名称和描述信息） -->
-              <transition name="slide-fade" appear>
-                <div class="chat-box-top">
-                  <div class="chat-box-top-name">{{currentPerson.name}}</div>
-                  <div class="chat-box-top-desc">{{currentPerson.desc}}</div>
-                </div>
-              </transition>
-              <hr class="chat-box-top-hr" />
-              <!-- 聊天框-内容盒子 -->
-              <div
-                class="chat-box-middle"
-                ref="chatBoxMiddle"
-                @scroll="onChatBoxMiddleScroll"
-              >
-                <!-- 聊天内容... -->
-                <template v-for="m in currentSession.messages" :key="m">
-                  <!-- 1. 对方的消息 -->
-                  <div v-if="m.type=='left'" class="msg-left">
-                    <!-- 聊天内容-头像 -->
-                    <transition name="msg-icon-fade">
-                      <img
-                        v-if="m.appear"
-                        :src="m.icon"
-                        alt=""
-                        class="msg-left-icon"
-                      />
-                    </transition>
-                    <div class="msg-left-name-and-content">
-                      <!-- 聊天内容-昵称 -->
+        <!-- 聊天框 -->
+        <div class="right">
+          <div class="chat-box" :class="{'chat-box-active':sessionSelected}">
+            <transition name="fade">
+              <div class="chat-box-container" v-if="sessionChanged">
+                <!-- 聊天框-顶部盒子（名称和描述信息） -->
+                <transition name="slide-fade" appear>
+                  <div class="chat-box-top">
+                    <div class="chat-box-top-name">{{currentPerson.name}}</div>
+                    <div class="chat-box-top-desc">{{currentPerson.desc}}</div>
+                  </div>
+                </transition>
+                <hr class="chat-box-top-hr" />
+                <!-- 聊天框-内容盒子 -->
+                <div
+                  class="chat-box-middle"
+                  ref="chatBoxMiddle"
+                  @scroll="onChatBoxMiddleScroll"
+                >
+                  <!-- 聊天内容... -->
+                  <template v-for="m in currentSession.messages" :key="m">
+                    <!-- 1. 对方的消息 -->
+                    <div v-if="m.type=='left'" class="msg-left">
+                      <!-- 聊天内容-头像 -->
+                      <transition name="msg-icon-fade">
+                        <img
+                          v-if="m.appear"
+                          :src="m.icon"
+                          alt=""
+                          class="msg-left-icon"
+                        />
+                      </transition>
+                      <div class="msg-left-name-and-content">
+                        <!-- 聊天内容-昵称 -->
+                        <transition name="msg-name-fade">
+                          <div v-if="m.appear" class="msg-left-name">
+                            {{m.name}}
+                          </div>
+                        </transition>
+                        <!-- 聊天内容-消息 -->
+                        <transition name="msg-icon-fade">
+                          <div v-if="m.appear">
+                            <div v-if="!m.finish" class="msg-left-circle-box">
+                              <div class="msg-circle-1"></div>
+                              <div class="msg-circle-2"></div>
+                              <div class="msg-circle-3"></div>
+                            </div>
+                            <transition name="msg-content-fade">
+                              <template v-if="m.finish">
+                                <div
+                                  v-if="m.msgType=='text'"
+                                  class="msg-left-balloon"
+                                >
+                                  <div class="msg-left-content">{{m.msg}}</div>
+                                </div>
+                                <div v-else>
+                                  <img
+                                    class="msg-pic-content"
+                                    :src="m.src"
+                                    alt=""
+                                  />
+                                </div>
+                              </template>
+                            </transition>
+                          </div>
+                        </transition>
+                      </div>
+                    </div>
+
+                    <!-- 2. 自己的消息 -->
+                    <div v-if="m.type=='right'" class="msg-right">
                       <transition name="msg-name-fade">
-                        <div v-if="m.appear" class="msg-left-name">
-                          {{m.name}}
+                        <div v-if="m.finish" class="msg-right-other">
+                          <!-- 聊天内容-昵称 -->
+                          <div class="msg-right-name">{{m.name}}</div>
+                          <!-- 聊天内容-消息 -->
+                          <div
+                            v-if="m.msgType=='text'"
+                            class="msg-right-content"
+                          >
+                            {{m.msg}}
+                          </div>
+                          <img
+                            v-else
+                            class="msg-pic-content"
+                            :src="m.src"
+                            alt=""
+                          />
                         </div>
                       </transition>
-                      <!-- 聊天内容-消息 -->
+
+                      <!-- 聊天内容-头像 -->
                       <transition name="msg-icon-fade">
-                        <div v-if="m.appear">
-                          <div v-if="!m.finish" class="msg-left-circle-box">
-                            <div class="msg-circle-1"></div>
-                            <div class="msg-circle-2"></div>
-                            <div class="msg-circle-3"></div>
-                          </div>
-                          <transition name="msg-content-fade">
-                            <template v-if="m.finish">
-                              <div
-                                v-if="m.msgType=='text'"
-                                class="msg-left-balloon"
-                              >
-                                <div class="msg-left-content">{{m.msg}}</div>
-                              </div>
-                              <div v-else>
-                                <img
-                                  class="msg-pic-content"
-                                  :src="m.src"
-                                  alt=""
-                                />
-                              </div>
-                            </template>
-                          </transition>
-                        </div>
+                        <img
+                          v-if="m.appear"
+                          :src="m.icon"
+                          alt=""
+                          class="msg-right-icon"
+                        />
                       </transition>
                     </div>
-                  </div>
-
-                  <!-- 2. 自己的消息 -->
-                  <div v-if="m.type=='right'" class="msg-right">
-                    <transition name="msg-name-fade">
-                      <div v-if="m.finish" class="msg-right-other">
-                        <!-- 聊天内容-昵称 -->
-                        <div class="msg-right-name">{{m.name}}</div>
-                        <!-- 聊天内容-消息 -->
-                        <div v-if="m.msgType=='text'" class="msg-right-content">
-                          {{m.msg}}
-                        </div>
-                        <img v-else class="msg-pic-content" :src="m.src" alt="" />
-                      </div>
-                    </transition>
-
-                    <!-- 聊天内容-头像 -->
-                    <transition name="msg-icon-fade">
-                      <img
-                        v-if="m.appear"
-                        :src="m.icon"
-                        alt=""
-                        class="msg-right-icon"
-                      />
-                    </transition>
-                  </div>
-                </template>
-                <!-- TODO: 优化底部水平线显示条件 -->
-                <hr v-if="currentSession.finish" class="chat-box-middle-hr" />
-              </div>
-              <!-- 聊天框-底部盒子（回复选项） -->
-              <div class="chat-box-bottom-grow"></div>
-              <div
-                class="chat-box-bottom"
-                :class="{'chat-box-bottom-expand':isSelectMessage && !isSelectClose}"
-              >
-                <div v-if="isSelectMessage">
-                  <hr class="chat-box-bottom-hr" />
-                  <div
-                    v-for="option in currentMessage.options"
-                    class="option"
-                    @click="clickOption(option)"
-                    @mouseover="option.hover=true"
-                    @mouseleave="option.hover=false"
-                    :class="{'option-hover':option.hover,'option-click':option.click}"
-                  >
-                    {{option.msg}}
+                  </template>
+                  <!-- TODO: 优化底部水平线显示条件 -->
+                  <hr v-if="currentSession.finish" class="chat-box-middle-hr" />
+                </div>
+                <!-- 聊天框-底部盒子（回复选项） -->
+                <div class="chat-box-bottom-grow"></div>
+                <div
+                  class="chat-box-bottom"
+                  :class="{'chat-box-bottom-expand':isSelectMessage && !isSelectClose}"
+                >
+                  <div v-if="isSelectMessage">
+                    <hr class="chat-box-bottom-hr" />
+                    <div
+                      v-for="option in currentMessage.options"
+                      class="option"
+                      @click="clickOption(option)"
+                      @mouseover="option.hover=true"
+                      @mouseleave="option.hover=false"
+                      :class="{'option-hover':option.hover,'option-click':option.click}"
+                    >
+                      {{option.msg}}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </transition>
+            </transition>
+          </div>
         </div>
       </div>
-    </div>
-    <footer>
-      <div>
-        Star Rail Message Maker v0.5
-        <a href="https://github.com/cubeww/star-rail-msg-maker">Github</a>
+      <!-- 页尾声明 -->
+      <div class="foot">
+        <div>
+          Star Rail Message Maker v0.5
+          <a href="https://github.com/cubeww/star-rail-msg-maker">Github </a>
+        </div>
+
+        <div>B站：@冰块Cube</div>
       </div>
-      <div>B站：@冰块Cube</div>
-    </footer>
+    </div>
     <script>
       const { createApp, reactive } = Vue
       const app = createApp({
         data() {
           return {
+            // 是否显示XML输入框
+            showTextArea: false,
+
+            // XML输入框中的数据
+            inputXMLText: "",
+
             // 联系人数据
             contacts: [],
 
-            // 表示是否已经选中过一个会话
+            // 表示是否已经选中过一个会话，用于改变聊天窗底色
             sessionSelected: false,
 
-            // 当前联系人对象
+            // 当前联系人对象，用于显示聊天窗顶部的昵称、描述
             currentPerson: null,
 
-            // 当前消息会话对象
+            // 当前消息会话对象，用于聊天窗消息遍历
             currentSession: null,
 
-            // 表示会话是否切换完成（过渡动画用）
+            // 表示会话是否切换完成，用于会话切换渐变动画
             sessionChanged: false,
 
-            // 表示当前会话最后一条信息
+            // 表示当前会话最后一条信息，用于option类型的消息绘制
             currentMessage: null,
 
-            // 滚轮滑动相关
-            autoScroll: true,
-            lastScrollTop: 0,
+            // 表示选项是否被选中（确认）
             isSelectClose: false,
+
+            // 滚轮滑动相关
+            autoScroll: true, // 表示是否自动下滚
+            lastScrollTop: 0, // 表示上一次的滚动距离
           }
         },
         computed: {
@@ -641,7 +676,15 @@
         methods: {
           // ------ 聊天记录解析函数 ------
 
-          // 从XML文件加载聊天记录
+          // 提交输入的XML
+          submitXML() {
+            let parser = new DOMParser()
+            let xml = parser.parseFromString(this.inputXMLText, "text/xml")
+            this.loadXML(xml.documentElement)
+            this.showTextArea = false
+          },
+
+          // 从XML文档加载聊天记录
           loadXML(xml) {
             this.contacts = [] // 清空数组先
 
@@ -737,16 +780,16 @@
                 }
 
                 if (next != null) {
-                  // 存在下一个节点，2s后发送下一个节点
+                  // 存在下一个节点，0.5s后发送下一个节点
                   session.nextNode = next
                   setTimeout(() => {
                     this.sendNextNode(session)
-                  }, finishTime + 2100)
+                  }, finishTime + 600)
                 } else {
                   // 不存在下一个节点，设置会话为完成状态
                   setTimeout(() => {
                     session.finish = true
-                  }, finishTime + 2100)
+                  }, finishTime + 600)
                 }
 
                 break
