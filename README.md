@@ -18,8 +18,6 @@ html+css+vue3+vscode
 
 首先你需要创建一个文本文件，并把后缀名改成.xml。然后就可以往里面填内容了。下面先给出一个简单的示例：
 
-（格式可能有点乱，可以复制到文本编辑器中看）
-
 ```xml
 <contacts>
     <person name="三月七" desc="今天也是三月七~" icon="images/三月七-小.png">
@@ -49,6 +47,8 @@ html+css+vue3+vscode
                     <right name='穹' icon='images/穹.png' type='text'>想啊，很想啊</right>
 
                     <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>好嘞</left>
+                    <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>https://github.com/cubeww/star-rail-msg-maker/blob/master/README.md</left>
+                    <left time='1.0' name='三月七' icon='images/三月七.png' type='text'>来看吧</left>
                 </option>
                 <option msg='不想'>
                     <right name='穹' icon='images/穹.png' type='text'>说的好，但是我不想</right>
