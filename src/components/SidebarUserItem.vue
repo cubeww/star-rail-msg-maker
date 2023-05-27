@@ -10,7 +10,7 @@
   </div>
   <!-- 仅当联系人选中时，下面出现的会话列表 -->
   <template v-if="isSelected()">
-    <template v-for="session in contact.getSessionsByUserId(user.id)" :key="session.id">
+    <template v-for="session in user.sessions" :key="session.id">
       <SidebarSessionItem :session="session"></SidebarSessionItem>
     </template>
   </template>
@@ -30,7 +30,7 @@ const isHovered = ref(false)
 const isClicked = ref(false)
 
 const isSelected = () => {
-  return user.id === contact.selectedUserId
+  return user === contact.selectedUser
 }
 
 const handleMouseEnter = () => {
@@ -45,7 +45,7 @@ const handleMouseDown = () => {
 }
 const handleClick = () => {
   isClicked.value = false
-  contact.selectUserById(user.id)
+  contact.selectUser(user)
 }
 
 </script>

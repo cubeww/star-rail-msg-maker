@@ -2,7 +2,7 @@
 <!-- 侧边栏中的会话项 -->
 
 <template>
-  <div class="session" :class="{ 'appear': isAppeared, 'hover': isHovered, 'click': isClicked, 'select': isSelected() }"
+  <div class="session" :class="{ 'hover': isHovered, 'click': isClicked, 'select': isSelected() }"
     @click="handleClick" @mousedown="handleMouseDown" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
     <img src="images/ui/session-icon.png" alt="">
     {{ session.title }}
@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { useContactStore, type Session } from '@/stores/contact';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 const contact = useContactStore()
 
 const { session } = defineProps<{
@@ -20,19 +20,10 @@ const { session } = defineProps<{
 
 const isHovered = ref(false)
 const isClicked = ref(false)
-const isAppeared = ref(false)
 
 const isSelected = () => {
-  return session.id === contact.selectedSessionId
+  return session === contact.selectedSession
 }
-
-onMounted(() => {
-  // 会话项 出现时淡入效果
-  setTimeout(() => {
-    isAppeared.value = true
-  }, 200);
-})
-
 
 const handleMouseEnter = () => {
   isHovered.value = true
@@ -48,7 +39,7 @@ const handleMouseDown = () => {
 }
 const handleClick = () => {
   isClicked.value = false
-  contact.selectSessionById(session.id)
+  contact.selectSession(session)
 }
 
 </script>
@@ -85,8 +76,6 @@ const handleClick = () => {
     max-height: 10000px;
   }
 }
-
-.session.appear {}
 
 .session.hover {
   background-color: #cccece;

@@ -2,15 +2,15 @@
 <!-- 聊天窗口右侧的聊天盒，显示消息的地方 -->
 
 <template>
-  <div class="chat-box" :class="{ 'empty': isEmpty(), 'has': !isEmpty() }">
-    <div v-if="isEmpty()">
+  <div class="chat-box" :class="{ 'empty': !contact.isSessionSelected, 'has': contact.isSessionSelected }">
+    <div v-if="!contact.isSessionSelected">
       <img src="images/ui/chat-empty.png" alt="">
       <div>请选择联系人</div>
     </div>
     <div v-else class="container">
       <div class="header">
-        <div class="header-name">{{ contact.selectedUser.name }}</div>
-        <div class="header-desc">{{ contact.selectedUser.desc }}</div>
+        <div class="header-name">{{ contact.selectedUser?.name }}</div>
+        <div class="header-desc">{{ contact.selectedUser?.desc }}</div>
       </div>
       <div class="messages">
 
@@ -24,12 +24,7 @@
 
 <script setup lang="ts">
 import { useContactStore } from '@/stores/contact';
-import { computed } from 'vue';
 const contact = useContactStore()
-
-const isEmpty = () => {
-  return contact.selectedSessionId === null
-}
 
 </script>
 
@@ -84,7 +79,6 @@ const isEmpty = () => {
     opacity: 1;
   }
 }
-
 
 .header-name {
   font-size: 18px;
