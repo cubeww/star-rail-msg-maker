@@ -3,26 +3,28 @@
 
 <template>
   <div class="window">
-    <div class="title">
-      <img src="images/ui/icon.png" alt=""> &nbsp;&nbsp;
-      短信
+    <div class="container">
+      <div class="title">
+        <img src="images/ui/icon.png" alt=""> &nbsp;&nbsp;
+        短信
+      </div>
+      <ChatSidebar class="sidebar"></ChatSidebar>
+      <ChatBox class="chat-box"></ChatBox>
     </div>
-    <ChatSidebar class="sidebar"></ChatSidebar>
-    <ChatBox class="chat-box"></ChatBox>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
-import ChatBox from './ChatBox.vue';
-import ChatSidebar from './ChatSidebar.vue';
+import ChatBox from '@/components/ChatBox.vue';
+import ChatSidebar from '@/components/ChatSidebar.vue';
 
-import { ContentType, MessageDirection, useContactStore } from '@/stores';
+import { ContentType, MessageDirection, useContactStore } from '@/stores/contact';
 const { addUser, addSession, sendMessageText, sendMessageSelect, makeOption } = useContactStore()
 
 onMounted(() => {
   const user1 = addUser('三月七', 'images/avatar/三月七.png', '今天也是三月七~')
-  const session1 = addSession(user1, 'FIXME')
+  const session1 = addSession(user1)
   sendMessageText(session1, MessageDirection.Left, '你好啊')
   sendMessageSelect(session1, ContentType.Text, [
     makeOption('你是谁'),
@@ -37,6 +39,12 @@ onMounted(() => {
   width: 1280px;
   height: 720px;
   background-color: #1b1e27;
+  overflow: hidden;
+}
+
+.container {
+  opacity: 0;
+  animation: fade-in 0.3s ease-in-out forwards;
 }
 
 .title {
@@ -50,10 +58,32 @@ onMounted(() => {
 
 .sidebar {
   float: left;
+  transform: translateX(-50%);
+  animation: move-enter 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .chat-box {
   margin-left: 350px;
   overflow: hidden;
+  transform: translateX(50%);
+  animation: move-enter 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes move-enter {
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+/* 禁止用户选中文字 */
+* {
+  -webkit-user-select: none;
+  user-select: none;
 }
 </style>
