@@ -26,13 +26,20 @@ export interface Session {
 
 export interface Message {
   id: string
-
+  icon: string
+  name: string
   messageType: MessageType
+
+  isWriting: boolean
 
   contentType: ContentType
   contentText: string | null
   contentSrc: string | null
   contentOptions: SelectOption[] | null
+}
+
+export interface MessageText {
+
 }
 
 export enum MessageType {
@@ -97,9 +104,18 @@ export const useContactStore = defineStore("contact", {
     },
 
     // 给定会话、消息位置、文本内容，发送文本信息，返回消息
-    sendMessageText(session: Session, dir: MessageDirection, text: string) {
+    sendMessageText(
+      session: Session,
+      dir: MessageDirection,
+      name: string,
+      icon: string,
+      text: string
+    ) {
       const msg: Message = reactive({
         id: nanoid(),
+        name,
+        icon,
+        isWriting: true,
         messageType: dir as number,
         contentOptions: null,
         contentSrc: null,
@@ -113,19 +129,24 @@ export const useContactStore = defineStore("contact", {
     // 给定会话id、消息位置、文本内容、图片位置，发送图片信息，返回消息id
     // 文本内容仅用于显示在会话框处
     sendMessagePic(
+      name: string,
+      icon: string,
       session: Session,
       dir: MessageDirection,
       text: string,
       src: string
     ) {
-      const msg: Message = {
+      const msg: Message = reactive({
         id: nanoid(),
+        name,
+        icon,
+        isWriting: false,
         messageType: dir as number,
         contentOptions: null,
         contentSrc: src,
         contentText: text,
         contentType: ContentType.Pic,
-      }
+      })
       session.messages.push(msg)
       return msg
     },
@@ -136,21 +157,24 @@ export const useContactStore = defineStore("contact", {
       cttType: ContentType,
       options: SelectOption[]
     ) {
-      const msg: Message = {
+      const msg: Message = reactive({
         id: nanoid(),
+        name: "",
+        icon: "",
+        isWriting: false,
         messageType: MessageType.Select,
         contentOptions: options,
         contentSrc: null,
         contentText: null,
         contentType: cttType,
-      }
+      })
       session.messages.push(msg)
       return msg
     },
 
     // 创建一个选项对象
     makeOption(content: string) {
-      const op: SelectOption = { id: nanoid(), content }
+      const op: SelectOption = reactive({ id: nanoid(), content })
       return op
     },
 
@@ -171,9 +195,12 @@ export const useContactStore = defineStore("contact", {
     },
   },
   getters: {
+    // 返回用户是否被选择了
     isUserSelected: (state) => {
       return state.selectedUser !== null
     },
+
+    // 返回会话是否被选择了
     isSessionSelected: (state) => {
       return state.selectedSession !== null
     },

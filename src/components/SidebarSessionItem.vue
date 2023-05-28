@@ -4,7 +4,7 @@
 <template>
   <div class="session" :class="{ 'hover': isHovered, 'click': isClicked, 'select': isSelected() }"
     @click="handleClick" @mousedown="handleMouseDown" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
-    <img src="images/ui/session-icon.png" alt="">
+    <img src="/images/ui/session-icon.png" alt="">
     {{ session.title }}
   </div>
 </template>
