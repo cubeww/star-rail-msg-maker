@@ -19,14 +19,14 @@ import { onMounted } from 'vue';
 import ChatBox from '@/components/ChatBox.vue';
 import ChatSidebar from '@/components/ChatSidebar.vue';
 
-import { ContentType, MessageDirection, useContactStore } from '@/stores/contact';
-const { addUser, addSession, sendMessageText, sendMessageSelect, makeOption } = useContactStore()
+import { MessageType, MessageDirection, useContactStore } from '@/stores/contact';
+const { addUser, addSession, sendMessageText, setSelectEvent, makeOption } = useContactStore()
 
 onMounted(() => {
   const user1 = addUser('三月七', '/images/avatar/三月七.png', '今天也是三月七~')
   const session1 = addSession(user1)
   sendMessageText(session1, MessageDirection.Left, '三月七', '/images/avatar/三月七.png', '你好啊')
-  sendMessageSelect(session1, ContentType.Text, [
+  setSelectEvent(session1, MessageType.Text, [
     makeOption('你是谁'),
     makeOption('你为啥要说这个'),
   ])

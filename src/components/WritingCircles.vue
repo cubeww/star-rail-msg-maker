@@ -3,9 +3,9 @@
 
 <template>
   <div class="container">
-    <div class="circle-1"></div>
-    <div class="circle-2"></div>
-    <div class="circle-3"></div>
+    <div class="circle first"></div>
+    <div class="circle second"></div>
+    <div class="circle third"></div>
   </div>
 </template>
 
@@ -37,38 +37,25 @@
   }
 }
 
-.circle-1 {
+.circle {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background-color: black;
   display: inline-block;
   animation: blink 2s linear infinite;
+  opacity: 0;
+}
+
+.circle.first {
   animation-delay: 0;
-  opacity: 0;
 }
 
-.circle-2 {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: black;
-  display: inline-block;
-  margin-left: 2px;
-  animation: blink 2s linear infinite;
+.circle.second {
   animation-delay: 0.2s;
-  opacity: 0;
 }
 
-.circle-3 {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: black;
-  display: inline-block;
-  margin-left: 2px;
-  animation: blink 2s linear infinite;
+.circle.third {
   animation-delay: 0.4s;
-  opacity: 0;
 }
 </style>
