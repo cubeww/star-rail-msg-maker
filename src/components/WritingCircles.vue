@@ -1,5 +1,5 @@
 <!-- WritingCircles.vue -->
-<!-- 写消息时的三个闪烁的圆点 -->
+<!-- CSS实现的写消息时的三个闪烁的圆点 ooo -->
 
 <template>
   <div class="container">

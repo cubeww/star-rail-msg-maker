@@ -8,8 +8,10 @@
         <img src="/images/ui/icon.png" alt=""> &nbsp;&nbsp;
         短信
       </div>
-      <ChatSidebar class="sidebar"></ChatSidebar>
-      <ChatBox class="chat-box"></ChatBox>
+      <div class="flex-container">
+        <ChatSidebar class="sidebar"></ChatSidebar>
+        <ChatBox class="chat-box"></ChatBox>
+      </div>
     </div>
   </div>
 </template>
@@ -26,10 +28,15 @@ onMounted(() => {
   const user1 = addUser('三月七', '/images/avatar/三月七.png', '今天也是三月七~')
   const session1 = addSession(user1)
   sendMessageText(session1, MessageDirection.Left, '三月七', '/images/avatar/三月七.png', '你好啊')
+  sendMessageText(session1, MessageDirection.Left, '三月七', '/images/avatar/三月七.png', '这里是会话1')
   setSelectEvent(session1, MessageType.Text, [
     makeOption('你是谁'),
     makeOption('你为啥要说这个'),
   ])
+
+  const session2 = addSession(user1)
+  sendMessageText(session2, MessageDirection.Left, '三月七', '/images/avatar/三月七.png', '你好啊')
+  sendMessageText(session2, MessageDirection.Left, '三月七', '/images/avatar/三月七.png', '这里是会话2')
 })
 
 </script>
@@ -47,6 +54,10 @@ onMounted(() => {
   animation: fade-in 0.3s ease-in-out forwards;
 }
 
+.flex-container {
+  display: flex;
+}
+
 .title {
   padding-left: 32px;
   padding-top: 16px;
@@ -57,13 +68,11 @@ onMounted(() => {
 }
 
 .sidebar {
-  float: left;
   transform: translateX(-50%);
   animation: move-enter 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .chat-box {
-  margin-left: 350px;
   overflow: hidden;
   transform: translateX(50%);
   animation: move-enter 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;

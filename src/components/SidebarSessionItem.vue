@@ -51,18 +51,18 @@ const handleClick = () => {
   height: 35px;
   border: 2px solid;
   border-color: #727273;
-  margin: 6px auto;
+  margin-top: 6px;
   background-color: #12171d;
   transition: background-color 0.1s ease-in-out, width 0.1s ease-in-out,
     height 0.1s ease-in-out, color 0.1s ease-in-out;
-  display: flex;
-  align-items: center;
-  font-size: 15px;
-
   animation: fade-in 0.25s linear forwards, grow 60.0s linear forwards;
   animation-delay: 0.25s, 0s;
   opacity: 0;
   max-height: 0;
+
+  display: flex;
+  align-items: center;
+  font-size: 15px;
 }
 
 @keyframes fade-in {

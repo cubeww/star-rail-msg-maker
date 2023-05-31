@@ -65,6 +65,7 @@ const handleClick = () => {
   background-color: #13141a;
   margin-top: 15px;
   transition: border-color 0.1s ease-in-out, color 0.1s ease-in-out;
+  position: relative;
 }
 
 .user.select {
@@ -88,21 +89,16 @@ const handleClick = () => {
   margin-right: 15px;
 }
 
+/* 角色名字右面的 “>” 形状小箭头 */
+/* 使用绝对定位，不占用标准流空间 */
 .arrow {
-  margin-left: 150px;
-  transition: margin-left 0.1s ease-in-out, transform 0.2s ease-in-out;
+  position: absolute;
+  transition: right 0.1s ease-in-out, transform 0.2s ease-in-out;
+  right: 25px;
 }
 
 .arrow.hover {
-  margin-left: 155px;
-}
-
-.arrow.select {
-  transform: rotate(90deg);
-}
-
-.arrow.hover {
-  margin-left: 155px;
+  right: 20px
 }
 
 .arrow.select {

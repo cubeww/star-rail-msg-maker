@@ -32,6 +32,10 @@ const contact = useContactStore()
   height: 550px;
   overflow-x: hidden;
   overflow-y: scroll;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .contact-list::-webkit-scrollbar {
