@@ -110,6 +110,24 @@ export const useContactStore = defineStore("contact", {
       return session
     },
 
+    // 给定会话、消息位置、发送空白消息，可以在以后将消息内容替换成正常内容
+    sendMessageWriting(
+      session: Session,
+      direction: MessageDirection,
+      name: string,
+      avatar: string,
+    ) {
+      const msg: Message = reactive({
+        id: nanoid(),
+        name,
+        direction,
+        avatar,
+        content: null,
+      })
+      session.messages.push(msg)
+      return msg
+    },
+
     // 给定会话、消息位置、文本内容，发送文本信息，返回消息
     sendMessageText(
       session: Session,

@@ -14,9 +14,9 @@
 
 <style scoped>
 .container {
-  margin-top: 5px;
-  margin-left: 13px;
-  display: block;
+  margin-top: 15px;
+  margin-left: 5px;
+  display: flex;
 }
 
 @keyframes blink {
@@ -45,6 +45,7 @@
   display: inline-block;
   animation: blink 2s linear infinite;
   opacity: 0;
+  margin-right: 3px;
 }
 
 .circle.first {
