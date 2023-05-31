@@ -1,3 +1,6 @@
+<!-- ChatContainer.vue -->
+<!-- ChatBox中的内容容器，具备聊天区的全部功能 -->
+
 <template>
   <div class="chat-container">
     <!-- 顶部联系人名字和描述 -->

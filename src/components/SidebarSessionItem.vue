@@ -1,4 +1,4 @@
-<!-- SessionItem.vue -->
+<!-- SidebarSessionItem.vue -->
 <!-- 侧边栏中的会话项 -->
 
 <template>

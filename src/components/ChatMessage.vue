@@ -4,31 +4,32 @@
 <template>
   <div class="message-container" v-if="message.direction == MessageDirection.Left">
     <!-- 消息头像 -->
-    <img class="avatar" :src="message.icon" alt="">
+    <img class="avatar" :src="message.avatar" alt="">
     <div class="name-and-content">
       <!-- 消息昵称 -->
       <div class="name">{{ message.name }}</div>
       <!-- 如果消息正在输入中，则显示圆圈 -->
-      <template v-if="message.isWriting">
+      <template v-if="message.content === null">
         <WritingCircles></WritingCircles>
       </template>
       <!-- 否则显示消息内容 -->
       <template v-else>
         <!-- 如果消息是文本类型，显示消息气泡+内容 -->
-        <div v-if="message.type == MessageType.Text" class="balloon" ref="balloon">
+        <div v-if="message.content.type == MessageContentType.Text" class="balloon" ref="balloon">
           <div class="content" ref="textContent">
-            {{ (message as MessageText).text }}
+            {{ (message.content as MessageContentText).text }}
           </div>
         </div>
         <!-- 如果消息是图片类型，直接显示图片 -->
-        <img v-else-if="message.type == MessageType.Pic" class="content-pic" :src="(message as MessagePic).src">
+        <img v-else-if="message.content.type == MessageContentType.Pic" class="content-pic"
+          :src="(message.content as MessageContentPic).src">
       </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { MessageType, type Message, MessageDirection, type MessageText, type MessagePic } from '@/stores/contact';
+import { MessageContentType, type Message, MessageDirection, type MessageContentText, type MessageContentPic } from '@/stores/contact';
 import WritingCircles from './WritingCircles.vue'
 import { onMounted, ref, type Ref } from 'vue';
 

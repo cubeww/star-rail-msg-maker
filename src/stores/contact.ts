@@ -12,7 +12,7 @@ export interface Contact {
 export interface User {
   id: string
   name: string
-  icon: string
+  avatar: string
   desc: string
   sessions: Session[]
 }
@@ -26,39 +26,42 @@ export interface Session {
 }
 
 export interface Message {
-  type: MessageType
   id: string
   direction: MessageDirection
   name: string
-  icon: string
-  isWriting: boolean
+  avatar: string
+  content: MessageContent | null // content为null 代表“输入中”状态
 }
 
-export interface MessageText extends Message {
-  type: MessageType.Text
+export interface MessageContent {
+  type: MessageContentType
+}
+
+export interface MessageContentText {
+  type: MessageContentType.Text
   text: string
 }
 
-export interface MessagePic extends Message {
-  type: MessageType.Pic
-  text: string
+export interface MessageContentPic {
+  type: MessageContentType.Pic
+  text: string // 图片类型的内容也要在侧边栏显示消息文字，所以保留text属性
   src: string
+}
+
+export enum MessageContentType {
+  Text,
+  Pic,
 }
 
 export interface SelectEvent {
   id: string
   options: SelectOption[]
-  type: MessageType
+  type: MessageContentType
 }
 
 export enum MessageDirection {
   Left = 0,
   Right = 1,
-}
-
-export enum MessageType {
-  Text,
-  Pic,
 }
 
 export interface SelectOption {
@@ -79,11 +82,11 @@ export const useContactStore = defineStore("contact", {
     // ------------------------ 联系人数据操作函数 ------------------------
 
     // 添加一个用户，并返回新用户
-    addUser(name: string, icon: string, desc: string) {
+    addUser(name: string, avatar: string, desc: string) {
       const user: User = reactive({
         id: nanoid(),
         name,
-        icon,
+        avatar,
         desc,
         sessions: [],
       })
@@ -112,17 +115,18 @@ export const useContactStore = defineStore("contact", {
       session: Session,
       direction: MessageDirection,
       name: string,
-      icon: string,
+      avatar: string,
       text: string
     ) {
-      const msg: MessageText = reactive({
+      const msg: Message = reactive({
         id: nanoid(),
-        type: MessageType.Text,
         name,
-        isWriting: false,
         direction,
-        icon,
-        text,
+        avatar,
+        content: {
+          type: MessageContentType.Text,
+          text,
+        } as MessageContentText,
       })
       session.messages.push(msg)
       return msg
@@ -132,21 +136,22 @@ export const useContactStore = defineStore("contact", {
     // 文本内容仅用于显示在会话框处
     sendMessagePic(
       name: string,
-      icon: string,
+      avatar: string,
       session: Session,
       direction: MessageDirection,
       text: string,
       src: string
     ) {
-      const msg: MessagePic = reactive({
+      const msg: Message = reactive({
         id: nanoid(),
-        type: MessageType.Pic,
         direction,
-        icon,
-        isWriting: false,
+        avatar,
         name,
-        src,
-        text,
+        content: {
+          type: MessageContentType.Pic,
+          text,
+          src,
+        } as MessageContentPic,
       })
       session.messages.push(msg)
       return msg
@@ -155,7 +160,7 @@ export const useContactStore = defineStore("contact", {
     // 给定会话id、选项内容类型、选项内容，设置选项事件
     setSelectEvent(
       session: Session,
-      type: MessageType,
+      type: MessageContentType,
       options: SelectOption[]
     ) {
       const ev: SelectEvent = reactive({
@@ -170,6 +175,7 @@ export const useContactStore = defineStore("contact", {
     // 创建一个选项对象
     makeOption(content: string) {
       const op: SelectOption = reactive({ id: nanoid(), content })
+      // 我们原神怎么你了？
       return op
     },
 

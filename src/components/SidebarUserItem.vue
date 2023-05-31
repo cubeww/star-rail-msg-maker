@@ -1,11 +1,11 @@
-<!-- UserItem.vue -->
+<!-- SidebarUserItem.vue -->
 <!-- 侧边栏的联系人用户项 -->
 
 <template>
   <!-- 联系人盒子本体 -->
   <div class="user" :class="{ 'hover': isHovered, 'click': isClicked, 'select': isSelected() }" @click="handleClick"
     @mousedown="handleMouseDown" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
-    <img class="avatar" :src="user.icon" alt=""> {{ user.name }}
+    <img class="avatar" :src="user.avatar" alt=""> {{ user.name }}
     <img class="arrow" :class="{ 'hover': isHovered, 'select': isSelected() }" src="/images/ui/arrow.png" alt="">
   </div>
   <!-- 仅当联系人选中时，下面出现的会话列表 -->
