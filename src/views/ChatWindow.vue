@@ -17,17 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import ChatBox from '@/components/ChatBox.vue';
 import ChatSidebar from '@/components/ChatSidebar.vue';
-
-import { MessageContentType, MessageDirection, useContactStore, type Session } from '@/stores/contact';
-const { addUser, addSession, sendMessageText, setSelectEvent, makeOption, sendMessageWriting } = useContactStore()
-
-onMounted(() => {
-  const user1 = addUser('三月七', '/images/avatar/三月七.png', '今天也是三月七~')
-  const session1 = addSession(user1)
-})
 
 </script>
 

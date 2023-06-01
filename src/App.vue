@@ -3,9 +3,8 @@
 </template>
 
 <script setup lang="ts">
-  import ChatWindow from './views/ChatWindow.vue';
+import ChatWindow from './views/ChatWindow.vue';
+
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

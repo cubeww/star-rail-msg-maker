@@ -1,12 +1,21 @@
-import { nanoid } from "nanoid"
 import { defineStore } from "pinia"
 import { reactive } from "vue"
+
+export enum ContactEvent {
+  OnUserSelected,
+  OnSessionSelected,
+  OnMessageSent,
+  OnOptionSelected,
+}
 
 export interface Contact {
   users: User[]
   sessions: Session[]
   selectedUser: User | null
   selectedSession: Session | null
+  eventListers: {
+    [key in ContactEvent]?: { listener: Object; callback: Function }[]
+  }
 }
 
 export interface User {
@@ -78,15 +87,16 @@ export const useContactStore = defineStore("contact", {
       sessions: [],
       selectedSession: null,
       selectedUser: null,
+      eventListers: {},
     }
   },
   actions: {
     // ------------------------ 联系人数据操作函数 ------------------------
 
     // 添加一个用户，并返回新用户
-    addUser(name: string, avatar: string, desc: string) {
+    addUser(id: string, name: string, avatar: string, desc: string) {
       const user: User = reactive({
-        id: nanoid(),
+        id,
         name,
         avatar,
         desc,
@@ -97,10 +107,10 @@ export const useContactStore = defineStore("contact", {
     },
 
     // 给定用户，添加一个会话，并返回新会话
-    addSession(user: User) {
+    addSession(user: User, id: string) {
       const session: Session = reactive({
         user,
-        id: nanoid(),
+        id,
         title: "",
         messages: [],
         selectEvent: null,
@@ -116,12 +126,13 @@ export const useContactStore = defineStore("contact", {
     // 给定会话、消息位置、发送空白消息，可以在以后将消息内容替换成正常内容
     sendMessageWriting(
       session: Session,
+      id: string,
       direction: MessageDirection,
       name: string,
       avatar: string
     ) {
       const msg: Message = reactive({
-        id: nanoid(),
+        id,
         name,
         direction,
         avatar,
@@ -129,12 +140,14 @@ export const useContactStore = defineStore("contact", {
         playEnterAnim: true,
       })
       session.messages.push(msg)
+      this.emitEvent(ContactEvent.OnMessageSent, msg)
       return msg
     },
 
     // 给定会话、消息位置、文本内容，发送文本信息，返回消息
     sendMessageText(
       session: Session,
+      id: string,
       direction: MessageDirection,
       name: string,
       avatar: string,
@@ -142,7 +155,7 @@ export const useContactStore = defineStore("contact", {
       playEnterAnim: boolean = true
     ) {
       const msg: Message = reactive({
-        id: nanoid(),
+        id,
         name,
         direction,
         avatar,
@@ -153,22 +166,24 @@ export const useContactStore = defineStore("contact", {
         playEnterAnim,
       })
       session.messages.push(msg)
+      this.emitEvent(ContactEvent.OnMessageSent, msg)
       return msg
     },
 
     // 给定会话id、消息位置、文本内容、图片位置，发送图片信息，返回消息id
     // 文本内容仅用于显示在会话框处
     sendMessagePic(
+      session: Session,
+      id: string,
+      direction: MessageDirection,
       name: string,
       avatar: string,
-      session: Session,
-      direction: MessageDirection,
       text: string,
       src: string,
       playEnterAnim: boolean = true
     ) {
       const msg: Message = reactive({
-        id: nanoid(),
+        id,
         direction,
         avatar,
         name,
@@ -180,17 +195,19 @@ export const useContactStore = defineStore("contact", {
         playEnterAnim,
       })
       session.messages.push(msg)
+      this.emitEvent(ContactEvent.OnMessageSent, msg)
       return msg
     },
 
     // 给定会话id、选项内容类型、选项内容，设置选项事件
     setSelectEvent(
       session: Session,
+      id: string,
       type: MessageContentType,
       options: SelectOption[]
     ) {
       const ev: SelectEvent = reactive({
-        id: nanoid(),
+        id,
         options,
         type,
       })
@@ -200,8 +217,8 @@ export const useContactStore = defineStore("contact", {
     },
 
     // 创建一个选项对象
-    makeOption(content: string) {
-      const op: SelectOption = reactive({ id: nanoid(), content })
+    makeOption(id: string, content: string) {
+      const op: SelectOption = reactive({ id, content })
       // 我们原神怎么你了？
       return op
     },
@@ -212,6 +229,7 @@ export const useContactStore = defineStore("contact", {
     selectUser(user: User) {
       if (this.selectedUser != user) {
         this.selectedUser = user
+        this.emitEvent(ContactEvent.OnUserSelected, user)
       } else {
         this.selectedUser = null
       }
@@ -220,30 +238,31 @@ export const useContactStore = defineStore("contact", {
     // 如果没有选中会话，则选中会话
     selectSession(session: Session) {
       this.selectedSession = session
+      this.emitEvent(ContactEvent.OnSessionSelected, session)
+    },
 
-      var msg: Message
-      // 测试！！！！！！！
-      setTimeout(() => {
-        msg = this.sendMessageWriting(
-          session,
-          MessageDirection.Left,
-          "三月七",
-          "/images/avatar/三月七.png"
-        )
-      }, 1000)
-      setTimeout(() => {
-        msg.content = reactive({
-          type: MessageContentType.Text,
-          text: "看看",
-        })
-      }, 2000)
-      setTimeout(() => {
-        this.setSelectEvent(session, MessageContentType.Text, [
-          this.makeOption("你干嘛"),
-          this.makeOption("这可真是"),
-          this.makeOption("太酷啦"),
-        ])
-      }, 3000)
+    // ------------------------ 事件类函数 ------------------------
+
+    // 给定回调，订阅一个事件
+    addEventListener(
+      event: ContactEvent,
+      listener: Object,
+      callback: Function
+    ) {
+      if (!this.eventListers[event]) {
+        this.eventListers[event] = []
+      }
+      this.eventListers[event]?.push({ listener, callback })
+    },
+
+    // 发送一个事件
+    emitEvent(event: ContactEvent, ...args: any[]) {
+      if (!this.eventListers[event]) {
+        return
+      }
+      for (const f of this.eventListers[event]!) {
+        f.callback.call(f.listener, ...args)
+      }
     },
   },
   getters: {

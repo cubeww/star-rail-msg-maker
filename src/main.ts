@@ -11,3 +11,10 @@ const app = createApp(App)
 app.use(pinia)
 app.mount("#app")
 
+// 安装模块：XML
+import("./modules/xml").then((xml) => {
+  xml.XMLMessagePlayer.use()
+}).then(()=>{
+  import('./test')
+})
+

@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SelectOption } from '@/stores/contact';
+import { ContactEvent, type SelectOption } from '@/stores/contact';
 import { ref } from 'vue';
 
 const { option } = defineProps<{ option: SelectOption }>()
@@ -46,6 +46,7 @@ const handleClick = () => {
 
   setTimeout(() => {
     contact.selectedSession!.showSelectEvent = false
+    contact.emitEvent(ContactEvent.OnOptionSelected, option)
   }, 100);
 }
 </script>

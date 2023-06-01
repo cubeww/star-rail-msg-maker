@@ -1,0 +1,19 @@
+<contact>
+  <user name="三月七" desc="今天也是三月七~" avatar="/images/avatar/三月七.png">
+    <session>
+
+      <left time="1.0" name="三月七" avatar="/images/avatar/三月七.png" type="text">穹</left>
+      <left time="1.0" name="三月七" avatar="/images/avatar/三月七.png" type="text">你好啊</left>
+
+      <select type="text">
+        <option message="你是？">
+          <right name="穹" avatar="/images/avatar/穹.png" type="text">你是谁？</right>
+        </option>
+        <option message="这是？">
+          <right name="穹" avatar="/images/avatar/穹.png" type="text">这是啥？</right>
+        </option>
+      </select>
+
+    </session>
+  </user>
+</contact>
