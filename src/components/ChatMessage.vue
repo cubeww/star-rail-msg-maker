@@ -1,8 +1,12 @@
 <!-- ChatMessage.vue -->
-<!-- 聊天盒的单个消息 (Normal型) -->
+<!-- 聊天盒的单个消息，包括头像、名称、内容 -->
 
 <template>
-  <div class="message-container" v-if="message.direction == MessageDirection.Left">
+  <div class="message-container" ref="container" :class="{
+    'left': message.direction == MessageDirection.Left,
+    'right': message.direction == MessageDirection.Right,
+    'enter': message.playEnterAnim,
+  }">
     <!-- 消息头像 -->
     <img class="avatar" :src="message.avatar" alt="">
     <div class="name-and-content">
@@ -14,36 +18,22 @@
       </template>
       <!-- 否则显示消息内容 -->
       <template v-else>
-        <!-- 如果消息是文本类型，显示消息气泡+内容 -->
-        <div v-if="message.content.type == MessageContentType.Text" class="balloon" ref="balloon">
-          <div class="content" ref="textContent">
-            {{ (message.content as MessageContentText).text }}
-          </div>
-        </div>
-        <!-- 如果消息是图片类型，直接显示图片 -->
-        <img v-else-if="message.content.type == MessageContentType.Pic" class="content-pic"
-          :src="(message.content as MessageContentPic).src">
+        <!-- expand代表是否启用消息气泡出现时的“扩张动画”
+          通常只有Left（对方）发送消息时需要显示扩张动画 -->
+        <ChatMessageContent :content="message.content" :expand="message.direction == MessageDirection.Left">
+        </ChatMessageContent>
       </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { MessageContentType, type Message, MessageDirection, type MessageContentText, type MessageContentPic } from '@/stores/contact';
+import { type Message, MessageDirection } from '@/stores/contact';
+
 import WritingCircles from './WritingCircles.vue'
-import { onMounted, ref, type Ref } from 'vue';
+import ChatMessageContent from './ChatMessageContent.vue'
 
 const { message } = defineProps<{ message: Message }>()
-const balloon: Ref<HTMLElement | null> = ref(null)
-const textContent: Ref<HTMLElement | null> = ref(null)
-
-onMounted(() => {
-  if (balloon.value !== null && textContent.value !== null) {
-    // 实现消息出现时的扩展特效
-    balloon.value.style.width = textContent.value.clientWidth.toString() + 'px'
-    balloon.value.style.opacity = "1"
-  }
-})
 
 </script>
 
@@ -52,21 +42,34 @@ onMounted(() => {
   margin-top: 10px;
   margin-bottom: 20px;
 
-  width: 400px;
+  width: 95%;
 
   display: flex;
-  flex-direction: row;
   align-items: flex-start;
+  flex-direction: row;
+}
+
+/* 让己方消息按主轴相反方向排列 */
+.right {
+  flex-direction: row-reverse;
 }
 
 .avatar {
-  margin-right: 8px;
+  width: 55px;
+  height: 55px;
 }
 
 .name-and-content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+/* 让己方名称和内容靠右（侧轴反向） */
+.right .name-and-content {
+  align-items: flex-end;
 }
 
 .name {
@@ -74,31 +77,36 @@ onMounted(() => {
   vertical-align: top;
 }
 
-.balloon {
-  margin-top: 10px;
-  background: linear-gradient(to bottom, #ebebeb 0%, #ebebeb 100%);
-  border-top-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  padding: 10px;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+/* 动画部分 */
 
-  width: 0;
+/* 消息整体进入动画：弹跳+淡入 */
+.message-container.enter {
+  animation: message-enter 0.5s cubic-bezier(0.64, 0.57, 0.67, 1.53) forwards;
+  transform: translateY(15px);
+}
+
+@keyframes message-enter {
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* 头像进入动画：淡入 */
+.enter .avatar {
   opacity: 0;
-  transition: width 0.5s ease-out, opacity 0.5s ease-in-out;
-  overflow: hidden;
+  animation: fade-in 0.5s ease-in-out forwards;
 }
 
-.content {
-  /* 将宽度设为仅与文字内容有关，方便过渡特效控制 */
-  width: max-content;
-  max-width: 200px;
+/* 名称和内容进入动画：淡入 */
+.enter .name-and-content {
+  opacity: 0;
+  animation: fade-in 0.5s ease-in-out forwards;
+  animation-delay: 0.25s;
 }
 
-.content-pic {
-  width: 150px;
-  height: 150px;
-  margin: 20px;
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
 }
 </style>

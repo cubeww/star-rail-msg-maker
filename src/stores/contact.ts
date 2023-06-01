@@ -23,6 +23,7 @@ export interface Session {
   title: string
   messages: Message[]
   selectEvent: SelectEvent | null
+  showSelectEvent: boolean
 }
 
 export interface Message {
@@ -31,6 +32,7 @@ export interface Message {
   name: string
   avatar: string
   content: MessageContent | null // content为null 代表“输入中”状态
+  playEnterAnim: boolean // 当playEnterAnim为true时，消息被**第一次**创建时会播放进入动画
 }
 
 export interface MessageContent {
@@ -60,8 +62,8 @@ export interface SelectEvent {
 }
 
 export enum MessageDirection {
-  Left = 0,
-  Right = 1,
+  Left,
+  Right,
 }
 
 export interface SelectOption {
@@ -102,6 +104,7 @@ export const useContactStore = defineStore("contact", {
         title: "",
         messages: [],
         selectEvent: null,
+        showSelectEvent: false,
       })
 
       // 向用户的会话id列表中加入新创建的会话id
@@ -115,7 +118,7 @@ export const useContactStore = defineStore("contact", {
       session: Session,
       direction: MessageDirection,
       name: string,
-      avatar: string,
+      avatar: string
     ) {
       const msg: Message = reactive({
         id: nanoid(),
@@ -123,6 +126,7 @@ export const useContactStore = defineStore("contact", {
         direction,
         avatar,
         content: null,
+        playEnterAnim: true,
       })
       session.messages.push(msg)
       return msg
@@ -134,7 +138,8 @@ export const useContactStore = defineStore("contact", {
       direction: MessageDirection,
       name: string,
       avatar: string,
-      text: string
+      text: string,
+      playEnterAnim: boolean = true
     ) {
       const msg: Message = reactive({
         id: nanoid(),
@@ -145,6 +150,7 @@ export const useContactStore = defineStore("contact", {
           type: MessageContentType.Text,
           text,
         } as MessageContentText,
+        playEnterAnim,
       })
       session.messages.push(msg)
       return msg
@@ -158,7 +164,8 @@ export const useContactStore = defineStore("contact", {
       session: Session,
       direction: MessageDirection,
       text: string,
-      src: string
+      src: string,
+      playEnterAnim: boolean = true
     ) {
       const msg: Message = reactive({
         id: nanoid(),
@@ -170,6 +177,7 @@ export const useContactStore = defineStore("contact", {
           text,
           src,
         } as MessageContentPic,
+        playEnterAnim,
       })
       session.messages.push(msg)
       return msg
@@ -187,6 +195,7 @@ export const useContactStore = defineStore("contact", {
         type,
       })
       session.selectEvent = ev
+      session.showSelectEvent = true
       return ev
     },
 
@@ -211,6 +220,30 @@ export const useContactStore = defineStore("contact", {
     // 如果没有选中会话，则选中会话
     selectSession(session: Session) {
       this.selectedSession = session
+
+      var msg: Message
+      // 测试！！！！！！！
+      setTimeout(() => {
+        msg = this.sendMessageWriting(
+          session,
+          MessageDirection.Left,
+          "三月七",
+          "/images/avatar/三月七.png"
+        )
+      }, 1000)
+      setTimeout(() => {
+        msg.content = reactive({
+          type: MessageContentType.Text,
+          text: "看看",
+        })
+      }, 2000)
+      setTimeout(() => {
+        this.setSelectEvent(session, MessageContentType.Text, [
+          this.makeOption("你干嘛"),
+          this.makeOption("这可真是"),
+          this.makeOption("太酷啦"),
+        ])
+      }, 3000)
     },
   },
   getters: {

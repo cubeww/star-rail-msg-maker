@@ -27,17 +27,6 @@ const { addUser, addSession, sendMessageText, setSelectEvent, makeOption, sendMe
 onMounted(() => {
   const user1 = addUser('三月七', '/images/avatar/三月七.png', '今天也是三月七~')
   const session1 = addSession(user1)
-  sendMessageText(session1, MessageDirection.Left, '三月七', '/images/avatar/三月七.png', '你好啊')
-  sendMessageText(session1, MessageDirection.Left, '三月七', '/images/avatar/三月七.png', '这里是会话1')
-  sendMessageWriting(session1, MessageDirection.Left, '三月七', '/images/avatar/三月七.png')
-  setSelectEvent(session1, MessageContentType.Text, [
-    makeOption('你是谁'),
-    makeOption('你为啥要说这个'),
-  ])
-
-  const session2 = addSession(user1)
-  sendMessageText(session2, MessageDirection.Left, '三月七', '/images/avatar/三月七.png', '你好啊')
-  sendMessageText(session2, MessageDirection.Left, '三月七', '/images/avatar/三月七.png', '这里是会话2')
 })
 
 </script>

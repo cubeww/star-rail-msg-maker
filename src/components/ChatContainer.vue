@@ -21,12 +21,10 @@
     <!-- <hr class="footer-hr"> -->
 
     <!-- 底部选项选择框 -->
-    <div class="footer">
-      <div>你是来拉屎的吧</div>
-      <div>你是来拉屎的吧</div>
-      <div>你是来拉屎的吧</div>
-      <div>你是来拉屎的吧</div>
-      <div>你是来拉屎的吧</div>
+    <div class="footer" :class="{ 'expand': session.showSelectEvent }" ref="footer">
+      <div class="option" v-for="op in session.selectEvent?.options" :key="op.id">
+        <ChatOptionButton :option="op"></ChatOptionButton>
+      </div>
     </div>
   </div>
 </template>
@@ -34,12 +32,18 @@
 <script setup lang="ts">
 import type { Session } from '@/stores/contact';
 import ChatMessage from './ChatMessage.vue';
-import { onMounted } from 'vue';
+import { onMounted, ref, type Ref, watch } from 'vue';
+import ChatOptionButton from './ChatOptionButton.vue';
 
 const { session } = defineProps<{ session: Session }>()
 
-onMounted(() => {
-  console.log('Session is: ' + session.id);
+const footer: Ref<HTMLElement> = ref(null!)
+
+watch(() => session.showSelectEvent, show => {
+  // showSelectEvent变化时，要等一帧才会更新footer的子元素高度，所以设置一点延迟
+  setTimeout(() => {
+    footer.value.style.height = show ? footer.value.scrollHeight + 'px' : '0'
+  }, 10);
 })
 
 </script>
@@ -133,18 +137,16 @@ onMounted(() => {
 }
 
 .footer {
-  position: relative;
   background-color: #cbcbcb;
-  max-height: 0px;
-  transition: max-height 1s ease-out,
-    opacity 0.25s ease-in-out;
-  opacity: 1;
+  transition: height 0.25s ease-out,
+    opacity 0.3s ease-in-out;
+  opacity: 0;
   overflow: hidden;
   flex-shrink: 0;
+  height: 0;
 }
 
 .footer.expand {
-  max-height: 500px;
   opacity: 1;
 }
 
